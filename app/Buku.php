@@ -8,6 +8,5 @@ class Buku extends Model
 {
     protected $table = 'buku';
     protected $fillable = [
-        'kd_buku','na_buku', 'na_genre',
-    ];
+        'kd_buku', 'na_buku', 'na_genre', 'usrnm'];
 }

@@ -114,21 +114,24 @@ class AdminController extends Controller
     public function addBuku(Request $request) {
         $kd_buku   =   $request->input('kd_buku');
         $na_buku   =   $request->input('na_buku');
-        $na_genre     =   $request->input('na_genre');
+        $na_genre  =   $request->input('na_genre');
+        $usrnm  =   Auth::user()->name;
         
         Buku::create([
             'kd_buku'   =>  $kd_buku,
             'na_buku'   =>  $na_buku,
-            'na_genre'     =>  $na_genre
+            'na_genre'  =>  $na_genre,
+            'usrnm'  =>  $usrnm
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Buku berhasil ditambahkan']);
     }
 
     public function getBuku(Request $request) {
-        $no_id     =   $request->input('no_id');
+        $no_id  =   $request->input('no_id');
         $buku   =   Buku::where('no_id', $no_id)->first();
 
+        
         return response()->json($buku);
     }
 
@@ -137,11 +140,13 @@ class AdminController extends Controller
         $kd_buku   =   $request->input('kd_buku');
         $na_buku   =   $request->input('na_buku');
         $na_genre  =   $request->input('na_genre');
+        $usrnm     =   Auth::user()->name;
 
         Buku::where('no_id', $no_id)->update([
             'kd_buku'   =>  $kd_buku,
             'na_buku'   =>  $na_buku,
-            'na_genre'     =>  $na_genre
+            'na_genre'  =>  $na_genre,
+            'usrnm'     =>  $usrnm,
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Buku berhasil diupdate']);
@@ -165,7 +170,7 @@ class AdminController extends Controller
     }
 
     public function addGenre(Request $request) {
-        $kd_genre   =   $request->input('kd_genre');
+        $kd_genre      =   $request->input('kd_genre');
         $na_genre   =   $request->input('na_genre');
         $usrnm      =   Auth::user()->name;
         

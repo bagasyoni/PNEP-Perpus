@@ -62,14 +62,6 @@
                         <label for="username">Nama Genre</label>
                         <input class="form-control" type="text" id="na_genre" placeholder="Masukkan Nama">
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="">Role</label>
-                        <select class="form-control" id="role">
-                            <option value="">Pilih</option>
-                            <option value="Administrator">Administrator</option>
-                            <option value="Pengawas">Pengawas</option>
-                        </select>
-                    </div> -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light"
@@ -91,20 +83,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="username">Kode Genre</label>
-                        <input class="form-control" type="email" id="edit_kd_genre" placeholder="Masukkan Kode" readonly readonly>
+                        <input class="form-control" type="text" id="edit_kd_genre" placeholder="Masukkan Kode">
                     </div>
                     <div class="form-group">
                         <label for="username">Nama Genre</label>
                         <input class="form-control" type="text" id="edit_na_genre" placeholder="Masukkan Nama">
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="">Role</label>
-                        <select class="form-control" id="edit_role">
-                            <option value="">Pilih</option>
-                            <option value="Administrator">Administrator</option>
-                            <option value="Pengawas">Pengawas</option>
-                        </select>
-                    </div> -->
                     <input type="hidden" id="edit_id">
                 </div>
                 <div class="modal-footer">

@@ -33,9 +33,9 @@
                                     <td>{{$row->kd_buku}}</td>
                                     <td>{{$row->na_buku}}</td>
                                     @if($row->role == 'Admin')
-                                        <td><span class="badge badge-danger ml-auto">{{$row->genre}}</span></td>
+                                        <td><span class="badge badge-danger ml-auto">{{$row->na_genre}}</span></td>
                                     @else
-                                    <td><span class="badge badge-info ml-auto">{{$row->genre}}</span></td>
+                                    <td><span class="badge badge-info ml-auto">{{$row->na_genre}}</span></td>
                                     @endif
                                     <td> 
                                         <button type="button" class="btn waves-effect waves-light btn-sm btn-info edit" bukuid="{{$row->no_id}}">Edit</button>
@@ -70,8 +70,7 @@
                     </div>
                     <div class="form-group">
                         <label for="username">Genre</label>
-                        <!-- <input class="form-control" type="text" id="genre" placeholder="Masukkan Genre Buku"> -->
-                        <select class="form-control" id="genre">
+                        <select class="form-control" id="na_genre">
                             <option value=""> pilih genre </option>
                             @foreach($genre as $row)
                             <option value="{{$row->na_genre}}">{{$row->na_genre}}</option>
@@ -115,21 +114,13 @@
                     </div>
                     <div class="form-group">
                         <label for="username">Genre</label>
-                        <select class="form-control" id="edit_genre">
+                        <select class="form-control" id="edit_na_genre">
                             <option value=""> pilih genre </option>
                             @foreach($genre as $row)
                             <option value="{{$row->na_genre}}">{{$row->na_genre}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="">Role</label>
-                        <select class="form-control" id="edit_role">
-                            <option value="">Pilih</option>
-                            <option value="Administrator">Administrator</option>
-                            <option value="Pengawas">Pengawas</option>
-                        </select>
-                    </div> -->
                     <input type="hidden" id="edit_id">
                 </div>
                 <div class="modal-footer">
@@ -148,14 +139,13 @@
 $(document).on('click', '#create', function() {
     var kd_buku  =   $('#kd_buku').val();
     var na_buku  =   $('#na_buku').val();
-    var genre    =   $('#genre').val();
-    console.log(kd_buku, na_buku, genre);
+    var na_genre    =   $('#na_genre').val();
 
-    if(kd_buku != '' && na_buku != '' && genre != '') {
+    if(kd_buku != '' && na_buku != '' && na_genre != '') {
         $.ajax({
             url: '{{route("addbuku")}}',
             type: 'post',
-            data: {kd_buku: kd_buku, na_buku: na_buku, genre: genre, _token: '{{csrf_token()}}'},
+            data: {kd_buku: kd_buku, na_buku: na_buku, na_genre: na_genre, _token: '{{csrf_token()}}'},
             success: function(response){
                 $('#add').modal('hide');
                 window.location.reload();
@@ -175,7 +165,7 @@ $(document).on('click', '.edit', function() {
         success: function(response){
             $('#edit_kd_buku').val(response['kd_buku']);
             $('#edit_na_buku').val(response['na_buku']);
-            $('#edit_genre').val(response['genre']);
+            $('#edit_na_genre').val(response['na_genre']);
             $('#edit_id').val(response['no_id']);
             $('#edit').modal('show');
         }
@@ -186,13 +176,13 @@ $(document).on('click', '#update', function() {
     var no_id    =   $('#edit_id').val();
     var kd_buku  =   $('#edit_kd_buku').val();
     var na_buku  =   $('#edit_na_buku').val();
-    var genre    =   $('#edit_genre').val();
+    var na_genre =   $('#edit_na_genre').val();
 
-    if(kd_buku != '' && na_buku != '' && genre != '') {
+    if(kd_buku != '' && na_buku != '' && na_genre != '') {
         $.ajax({
             url: '{{route("updatebuku")}}',
             type: 'post',
-            data: {no_id: no_id, kd_buku: kd_buku, na_buku: na_buku, genre: genre,  _token: '{{csrf_token()}}'},
+            data: {no_id: no_id, kd_buku: kd_buku, na_buku: na_buku, na_genre: na_genre,  _token: '{{csrf_token()}}'},
             success: function(response){
                 $('#update').modal('hide');
                 window.location.reload();
