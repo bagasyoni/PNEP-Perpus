@@ -11,8 +11,6 @@
 <div class="container-fluid">
     <div class="card-group">
         <button type="button" class="btn waves-effect waves-light btn-lg btn-primary" data-toggle="modal" data-target="#add">Tambah Data</button>
-        &nbsp;
-        <button type="button" class="btn waves-effect waves-light btn-lg btn-primary" id="btnExportExcel">Print</button>
     </div>
     <div class="row">
         <div class="col-12">
@@ -24,8 +22,8 @@
                             <thead>
                                 <tr>
                                     <th>No Bukti</th>
-                                    <th>Nama Peminjam</th>
-                                    <th>Devisi</th>
+                                    <th>Kode Member</th>
+                                    <th>Nama Member</th>
                                     <th>Tanggal Pinjam</th>
                                     <th>Keterangan</th>
                                     <th>Nama Buku</th>
@@ -36,10 +34,10 @@
                                 @foreach($pinjam as $row)
                                 <tr>
                                     <td>{{$row->no_bukti}}</td>
-                                    <td>{{$row->na_peg}}</td>
-                                    <td>{{$row->devisi}}</td>
+                                    <td>{{$row->kd_member}}</td>
+                                    <td>{{$row->na_member}}</td>
                                     <td>{{$row->tgl}}</td>
-                                    <td>{{$row->ket}}</td>
+                                    <td>{{$row->keterangan}}</td>
                                     <td>{{$row->na_buku}}</td>
                                     <td> 
                                         <button type="button" class="btn waves-effect waves-light btn-sm btn-info edit" pinjamid="{{$row->no_id}}">Edit</button>
@@ -68,31 +66,31 @@
                         <label for="username">No Bukti</label>
                         <input class="form-control" type="text" id="no_bukti" placeholder="Masukkan No Bukti">
                     </div>
-                    <div class="form-group">
-                        <label for="username">Nama Peminjam</label>
-                        <select class="form-control" name="na_peg" id="na_peg">
+                    <!-- <div class="form-group">
+                        <label for="username">Kode Member</label>
+                        <select class="form-control" name="kd_member" id="kd_member">
                             <option value=""> pilih user </option>
-                            @foreach($pegawai as $row)
-                            <option value="{{$row->na_peg}}">{{$row->na_peg}}</option>
+                            @foreach($member as $row)
+                            <option value="{{$row->no_id}}">{{$row->kd_member}}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
                     <div class="form-group">
-                        <label for="username">Devisi</label>
-                        <select class="form-control" name="devisi" id="devisi">
-                            <option value=""> pilih devisi </option>
-                            @foreach($devisi as $row)
-                            <option value="{{$row->no_id}}">{{$row->na_dev}}</option>
+                        <label for="username">Nama Member</label>
+                        <select class="form-control" name="na_member" id="na_member">
+                            <option value=""> pilih user </option>
+                            @foreach($member as $row)
+                            <option value="{{$row->na_member}}">{{$row->na_member}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="username">Keterangan</label>
-                        <input class="form-control" type="text" id="ket" placeholder="Masukkan Keterangan">
+                        <input class="form-control" type="text" id="keterangan" placeholder="Masukkan Keterangan">
                     </div>
                     <div class="form-group">
                         <label for="username">Judul Buku</label>
-                        <select class="form-control" name="buku_id" id="buku_id">
+                        <select class="form-control" name="id_buku" id="id_buku">
                             <option value=""> pilih buku </option>
                             @foreach($buku as $row)
                             <option value="{{$row->no_id}}">{{$row->na_buku}}</option>
@@ -128,28 +126,29 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="username">No Bukti</label>
-                        <input class="form-control" type="text" id="edit_no_bukti" placeholder="Masukkan No Bukti" readonly>
+                        <input class="form-control" type="text" id="edit_no_bukti" placeholder="Masukkan No Bukti">
                     </div>
-                    <div class="form-group">
-                        <label for="username">Nama Peminjam</label>
-                        <select class="form-control" name="na_peg" id="na_peg">
-                            @foreach($pegawai as $row)
-                            <option value="na_peg">{{$row->na_peg}}</option>
+                    <!-- <div class="form-group">
+                        <label for="username">Kode Member</label>
+                        <select class="form-control" name="kd_member" id="edit_kd_member">
+                            <option value=""> pilih member </option>
+                            @foreach($member as $row)
+                            <option value="{{$row->kd_member}}">{{$row->kd_member}}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
                     <div class="form-group">
-                        <label for="username">Devisi</label>
-                        <select class="form-control" name="devisi" id="edit_devisi">
-                            <option value=""> pilih devisi </option>
-                            @foreach($devisi as $row)
-                            <option value="{{$row->na_dev}}">{{$row->na_dev}}</option>
+                        <label for="username">Nama Member</label>
+                        <select class="form-control" name="na_member" id="edit_na_member">
+                            <option value=""> pilih member </option>
+                            @foreach($member as $row)
+                            <option value="{{$row->na_member}}">{{$row->na_member}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="username">Keterangan</label>
-                        <input class="form-control" type="text" id="edit_ket" placeholder="Masukkan Keterangan">
+                        <input class="form-control" type="text" id="edit_keterangan" placeholder="Masukkan Keterangan">
                     </div>
                     <div class="form-group">
                         <label for="username">Judul Buku</label>
@@ -184,20 +183,18 @@
 @push('script')
 <script>
 $(document).on('click', '#create', function() {
-    var no_bukti  =   $('#no_bukti').val();
-    var na_peg    =   $('#na_peg').val();
-    var devisi    =   $('#devisi').val();
-    var ket       =   $('#ket').val();
-    var buku_id   =   $('#buku_id').val();
-    console.log(no_bukti, na_peg, devisi, ket, buku_id)
+    var no_bukti     =   $('#no_bukti').val();
+    var na_member    =   $('#na_member').val();
+    var keterangan   =   $('#keterangan').val();
+    var id_buku      =   $('#id_buku').val();
+    console.log(no_bukti, na_member, keterangan, id_buku);
 
-    if(no_bukti != '' && na_peg != '' && devisi != '' && ket != '' && buku_id != '') {
+    if(no_bukti != '' && na_member != '' && keterangan != '' && id_buku != '') {
         $.ajax({
             url: '{{route("addpinjam")}}',
             type: 'post',
-            data: {no_bukti: no_bukti, na_peg: na_peg, devisi: devisi, ket: ket, buku_id: buku_id, _token: '{{csrf_token()}}'},
+            data: {no_bukti: no_bukti, na_member: na_member, keterangan: keterangan, id_buku: id_buku, _token: '{{csrf_token()}}'},
             success: function(response){
-                console.log(response)
                 $('#add').modal('hide');
                 window.location.reload();
             }

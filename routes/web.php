@@ -20,12 +20,6 @@ Route::group(['middleware' => 'auth:administrator'], function() {
     Route::post('dashboard/updatevoting', 'AdminController@updateVoting')->name('updatevoting');
     Route::post('dashboard/chart', 'AdminController@getChart')->name('Chart');
 
-    Route::get('mastertps', 'AdminController@viewTps');
-    Route::post('mastertps/create', 'AdminController@addTps')->name('addtps');
-    Route::post('mastertps/get', 'AdminController@getTps')->name('gettps');
-    Route::post('mastertps/update', 'AdminController@updateTps')->name('updatetps');
-    Route::post('mastertps/delete', 'AdminController@deleteTps')->name('deletetps');
-
     Route::get('masterusers', 'AdminController@viewUser');
     Route::post('masterusers/create', 'AdminController@addUser')->name('adduser');
     Route::post('masterusers/get', 'AdminController@getUser')->name('getuser');
@@ -44,23 +38,11 @@ Route::group(['middleware' => 'auth:administrator'], function() {
     Route::post('mastergenre/update', 'AdminController@updateGenre')->name('updategenre');
     Route::post('mastergenre/delete', 'AdminController@deleteGenre')->name('deletegenre');
 
-    Route::get('masterpegawai', 'AdminController@viewPegawai');
-    Route::post('masterpegawai/create', 'AdminController@addPegawai')->name('addpegawai');
-    Route::post('masterpegawai/get', 'AdminController@getPegawai')->name('getpegawai');
-    Route::post('masterpegawai/update', 'AdminController@updatePegawai')->name('updatepegawai');
-    Route::post('masterpegawai/delete', 'AdminController@deletePegawai')->name('deletepegawai');
-
     Route::get('mastermember', 'AdminController@viewMember');
     Route::post('mastermember/create', 'AdminController@addMember')->name('addmember');
     Route::post('mastermember/get', 'AdminController@getMember')->name('getmember');
     Route::post('mastermember/update', 'AdminController@updateMember')->name('updatemember');
     Route::post('mastermember/delete', 'AdminController@deleteMember')->name('deletemember');
-
-    Route::get('masterdevisi', 'AdminController@viewDevisi');
-    Route::post('masterdevisi/create', 'AdminController@addDevisi')->name('adddevisi');
-    Route::post('masterdevisi/get', 'AdminController@getDevisi')->name('getdevisi');
-    Route::post('masterdevisi/update', 'AdminController@updateDevisi')->name('updatedevisi');
-    Route::post('masterdevisi/delete', 'AdminController@deleteDevisi')->name('deletedevisi');
 
     Route::get('tpinjam', 'AdminController@viewPinjam');
     Route::post('tpinjam/create', 'AdminController@addPinjam')->name('addpinjam');

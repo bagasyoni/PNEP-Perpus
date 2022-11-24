@@ -226,38 +226,42 @@ class AdminController extends Controller
     public function addMember(Request $request) {
         $kd_member   =   $request->input('kd_member');
         $na_member   =   $request->input('na_member');
-        $alamat   =   $request->input('alamat');
-        $kontak   =   $request->input('kontak');
+        $alamat      =   $request->input('alamat');
+        $kontak      =   $request->input('kontak');
+        $usrnm       =   Auth::user()->name;
         
         Member::create([
             'kd_member'   =>  $kd_member,
             'na_member'   =>  $na_member,
-            'alamat'   =>  $alamat,
-            'kontak'   =>  $kontak
+            'alamat'      =>  $alamat,
+            'kontak'      =>  $kontak,
+            'usrnm'       =>  $usrnm
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Member berhasil ditambahkan']);
     }
 
     public function getMember(Request $request) {
-        $no_id     =   $request->input('no_id');
+        $no_id    =   $request->input('no_id');
         $member   =   Member::where('no_id', $no_id)->first();
 
         return response()->json($member);
     }
 
     public function updateMember(Request $request) {
-        $no_id     =   $request->input('no_id');
+        $no_id       =   $request->input('no_id');
         $kd_member   =   $request->input('kd_member');
         $na_member   =   $request->input('na_member');
-        $alamat   =   $request->input('alamat');
-        $kontak   =   $request->input('kontak');
+        $alamat      =   $request->input('alamat');
+        $kontak      =   $request->input('kontak');
+        $usrnm       =   Auth::User()->name;
 
         Member::where('no_id', $no_id)->update([
             'kd_member'   =>  $kd_member,
             'na_member'   =>  $na_member,
-            'alamat'   =>  $alamat,
-            'kontak'   =>  $kontak
+            'alamat'      =>  $alamat,
+            'kontak'      =>  $kontak,
+            'usrnm'       =>  $usrnm,
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Member berhasil diupdate']);
@@ -265,84 +269,24 @@ class AdminController extends Controller
 
     public function deleteMember(Request $request) {
         $no_id     =   $request->input('no_id');
-        Member::where('id', $no_id)->delete();
+        Member::where('no_id', $no_id)->delete();
 
         return response()->json(['status' => 'success', 'message' => 'Member berhasil dihapus']);
     }
     //=== end member ===//
 
-    //=== Start Devisi ===//
-    public function viewDevisi() {
-        $devisi  =   Devisi::all();
-
-        $data   =   [];
-        $data['devisi']  =   $devisi;
-
-        return view('devisi', $data);
-    }
-
-    public function addDevisi(Request $request) {
-        $kd_dev   =   $request->input('kd_dev');
-        $na_dev   =   $request->input('na_dev');
-        $usrnm     =   $request->input('usrnm');
-        $tg_smp    =   $request->input('tg_smp');
-        
-        Devisi::create([
-            'kd_dev'   =>  $kd_dev,
-            'na_dev'   =>  $na_dev,
-            'usrnm'     =>  $usrnm,
-            'tg_smp'    =>  $tg_smp
-        ]);
-
-        return response()->json(['status' => 'success', 'message' => 'Devisi berhasil ditambahkan']);
-    }
-
-    public function getDevisi(Request $request) {
-        $no_id     =   $request->input('no_id');
-        $devisi   =   Devisi::where('no_id', $no_id)->first();
-
-        return response()->json($devisi);
-    }
-
-    public function updateDevisi(Request $request) {
-        $no_id     =   $request->input('no_id');
-        $kd_dev   =   $request->input('kd_dev');
-        $na_dev   =   $request->input('na_dev');
-        $usrnm     =   $request->input('usrnm');
-        $tg_smp    =   $request->input('tg_smp');
-
-        Devisi::where('no_id', $no_id)->update([
-            'kd_dev'   =>  $kd_dev,
-            'na_dev'   =>  $na_dev,
-            'usrnm'     =>  $usrnm,
-            'tg_smp'    =>  $tg_smp
-        ]);
-
-        return response()->json(['status' => 'success', 'message' => 'Devisi berhasil diupdate']);
-    }
-
-    public function deleteDevisi(Request $request) {
-        $no_id     =   $request->input('no_id');
-        Devisi::where('id', $no_id)->delete();
-
-        return response()->json(['status' => 'success', 'message' => 'Devisi berhasil dihapus']);
-    }
-    //=== end genre ===//
-
     //=== Start Pinjam ===//
     public function viewPinjam() {
-        $pegawai    =   Pegawai::all();
-        $devisi     =   Devisi::all();
-        $buku       =   Buku::all();
-        $pinjam     = DB::table('keluar')
-                            ->join('buku','keluar.buku_id','buku.no_id')
-                            ->select('keluar.no_id','keluar.no_bukti','keluar.na_peg','keluar.devisi','keluar.tgl','keluar.ket','buku.na_buku')
-                            ->get();
+        $member    =  Member::all();
+        $buku      =  Buku::all();
+        $pinjam    =  DB::table('pinjam')
+                        ->join('buku','pinjam.id_buku','buku.no_id')
+                        ->select('pinjam.no_id','pinjam.no_bukti','pinjam.kd_member','pinjam.na_member','pinjam.tgl','pinjam.keterangan','buku.na_buku')
+                        ->get();
         $data   =   [];
         $data['pinjam']   =   $pinjam;
         $data['buku']     =   $buku;
-        $data['pegawai']  =   $pegawai;
-        $data['devisi']  =   $devisi;
+        $data['member']   =   $member;
 
                     
         return view('pinjam', $data);
@@ -350,23 +294,23 @@ class AdminController extends Controller
 
     public function addPinjam(Request $request) {
         $no_bukti       =   $request->input('no_bukti');
-        $na_peg         =   $request->input('na_peg');
-        $devisi         =   $request->input('devisi');
+        $kd_member      =   $request->input('kd_member');
+        $na_member      =   $request->input('na_member');
         $tgl            =   Carbon::now()->format('Y-m-d');
-        $ket            =   $request->input('ket');
-        $buku_id        =   $request->input('buku_id');
-        // $usrnm          =   $request->input('usrnm');
-        // $tg_smp         =   $request->input('tg_smp');
+        $id_buku        =   $request->input('id_buku');
+        $keterangan     =   $request->input('keterangan');
+        $usrnm          =   Auth::User()->name;
         
         Pinjam::create([
-            'no_bukti' =>  $no_bukti,
-            'na_peg'   =>  $na_peg,
-            'devisi'   =>  $devisi,
-            'tgl'      =>  $tgl,
-            'ket'      =>  $ket,
-            'buku_id'  =>  $buku_id
+            'no_bukti'    =>  $no_bukti,
+            'kd_member'   =>  $kd_member,
+            'na_member'   =>  $na_member,
+            'tgl'         =>  $tgl,
+            'id_buku'     =>  $id_buku,
+            'keterangan'  =>  $keterangan,
+            'usrnm'       =>  $usrnm
         ]);
-        // dd($cek);
+        //dd($cek);
         return response()->json(['status' => 'success', 'message' => 'Data berhasil ditambahkan']);
     }
 
@@ -383,7 +327,7 @@ class AdminController extends Controller
         $na_peg    =   $request->input('na_peg');
         $devisi    =   $request->input('devisi');
         $tgl       =   $request->input('tgl');
-        $ket       =   $request->input('ket');
+        $keterangan=   $request->input('keterangan');
         $buku_id   =   $request->input('buku_id');
         $usrnm     =   $request->input('usrnm');
         $tg_smp    =   $request->input('tg_smp');
@@ -391,9 +335,9 @@ class AdminController extends Controller
         Pinjam::where('no_id', $no_id)->update([
             'no_bukti' =>  $no_bukti,
             'na_peg'   =>  $na_peg,
-            'devisi'   =>  $devisi,
-            'tgl'      =>  $tgl,
-            'ket'      =>  $ket,
+            'devisi'    =>  $devisi,
+            'tgl'       =>  $tgl,
+            'keterangan'      =>  $keterangan,
             'buku_id'  =>  $buku_id,
             'usrnm'    =>  $usrnm,
             'tg_smp'   =>  $tg_smp
