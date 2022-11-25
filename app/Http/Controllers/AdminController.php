@@ -26,17 +26,17 @@ class AdminController extends Controller
 
     public function cek(Request $request) {
         $totalBuku      = Buku::count();
-        $totalPegawai   = Pegawai::count();
-        $dataChart      = DB::table('keluar')
-                            ->select(DB::raw('MONTH(tgl) month, COUNT(buku_id) as total'))
+        $totalMember    = Member::count();
+        $dataChartBuku  = DB::table('pinjam')
+                            ->select(DB::raw('MONTH(tgl) as month, COUNT(id_buku) as total_buku, COUNT(na_member) as total_member'))
                             ->groupBy('month')
                             ->get();
-
         $respond = [];
         $i = 0;
-        foreach ($dataChart as $row) {
+        foreach ($dataChartBuku as $row) {
             $respond['month'][$i]   =   $row->month;
-            $respond['total'][$i]   =   $row->total;
+            $respond['total_buku'][$i]   =   $row->total_buku;
+            $respond['total_member'][$i] =   $row->total_member;
             $i++;
         }
 
@@ -115,7 +115,8 @@ class AdminController extends Controller
         $kd_buku   =   $request->input('kd_buku');
         $na_buku   =   $request->input('na_buku');
         $na_genre  =   $request->input('na_genre');
-        $usrnm  =   Auth::user()->name;
+        $usrnm     =   Auth::user()->name;
+
         
         Buku::create([
             'kd_buku'   =>  $kd_buku,
@@ -170,7 +171,7 @@ class AdminController extends Controller
     }
 
     public function addGenre(Request $request) {
-        $kd_genre      =   $request->input('kd_genre');
+        $kd_genre   =   $request->input('kd_genre');
         $na_genre   =   $request->input('na_genre');
         $usrnm      =   Auth::user()->name;
         
@@ -178,6 +179,7 @@ class AdminController extends Controller
             'kd_genre'   =>  $kd_genre,
             'na_genre'   =>  $na_genre,
             'usrnm'      =>  $usrnm
+
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Genre berhasil ditambahkan']);
@@ -282,6 +284,7 @@ class AdminController extends Controller
         $pinjam    =  DB::table('pinjam')
                         ->join('buku','pinjam.id_buku','buku.no_id')
                         ->select('pinjam.no_id','pinjam.no_bukti','pinjam.kd_member','pinjam.na_member','pinjam.tgl','pinjam.keterangan','buku.na_buku')
+                        ->where('pinjam.status', '0')
                         ->get();
         $data   =   [];
         $data['pinjam']   =   $pinjam;
@@ -293,7 +296,14 @@ class AdminController extends Controller
     }
 
     public function addPinjam(Request $request) {
-        $no_bukti       =   $request->input('no_bukti');
+        $select_bukti       =   DB::table('pinjam')
+                            ->select('no_bukti')
+                            ->orderBy('no_bukti', 'DESC')
+                            ->limit(1)
+                            ->get();
+        $bulan          =   date("mY");
+        $nomor          =   substr($select_bukti, 23, -3);
+        $no_bukti       =   "BP". $bulan. "-". str_pad($nomor + 1, 4, '0', STR_PAD_LEFT);
         $kd_member      =   $request->input('kd_member');
         $na_member      =   $request->input('na_member');
         $tgl            =   Carbon::now()->format('Y-m-d');
@@ -310,13 +320,13 @@ class AdminController extends Controller
             'keterangan'  =>  $keterangan,
             'usrnm'       =>  $usrnm
         ]);
-        //dd($cek);
+        dd($no_bukti);
         return response()->json(['status' => 'success', 'message' => 'Data berhasil ditambahkan']);
     }
 
     public function getPinjam(Request $request) {
         $no_id     =   $request->input('no_id');
-        $pinjam   =   Pinjam::where('no_id', $no_id)->first();
+        $pinjam    =   Pinjam::where('no_id', $no_id)->first();
 
         return response()->json($pinjam);
     }
@@ -348,7 +358,7 @@ class AdminController extends Controller
 
     public function deletePinjam(Request $request) {
         $no_id     =   $request->input('no_id');
-        Pinjam::where('id', $no_id)->delete();
+        Pinjam::where('no_id', $no_id)->delete();
 
         return response()->json(['status' => 'success', 'message' => 'Data berhasil dihapus']);
     }

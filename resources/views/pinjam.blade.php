@@ -64,7 +64,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="username">No Bukti</label>
-                        <input class="form-control" type="text" id="no_bukti" placeholder="Masukkan No Bukti">
+                        <input class="form-control" type="text" id="no_bukti" placeholder="auto" readonly>
                     </div>
                     <!-- <div class="form-group">
                         <label for="username">Kode Member</label>
@@ -189,7 +189,7 @@ $(document).on('click', '#create', function() {
     var id_buku      =   $('#id_buku').val();
     console.log(no_bukti, na_member, keterangan, id_buku);
 
-    if(no_bukti != '' && na_member != '' && keterangan != '' && id_buku != '') {
+    if(na_member != '' && id_buku != '') {
         $.ajax({
             url: '{{route("addpinjam")}}',
             type: 'post',

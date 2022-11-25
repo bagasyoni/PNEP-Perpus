@@ -86,23 +86,22 @@
                 });
             }
 
-            function getChartData() {
+            function getChartDataBuku() {
                 $.ajax({
                     url: "{{ route('cek') }}",
                     success: function (result) {
-                        var data = [];
+                        var data_buku = [];
                         var result     =   JSON.parse(result);
 
-                        data.push(result['total']);
+                        data_buku.push(result['total_buku']);
                         var labels = result['month'];
-                        renderChart(data, labels);
+                        renderChart(data_buku, labels);
                     },
                     error: function (err) {
                         $("#loadingMessage").html("Error");
                     }
                 });
             }
-
-            getChartData();
+            getChartDataBuku();
         </script>
 @endpush
