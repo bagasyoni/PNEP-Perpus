@@ -50,9 +50,10 @@ Route::group(['middleware' => 'auth:administrator'], function() {
     Route::post('tpinjam/update', 'AdminController@updatePinjam')->name('updatepinjam');
     Route::post('tpinjam/delete', 'AdminController@deletePinjam')->name('deletepinjam');
 
-    Route::get('cek', 'AdminController@cek')->name('cek');
-
+    
 });
+
+Route::get('cek', 'AdminController@cek')->name('cek');
 
 Route::middleware(['auth:pengawas'])->group(function() {
     Route::get('pengawas', 'PengawasController@index');

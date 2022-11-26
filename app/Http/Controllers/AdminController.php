@@ -19,6 +19,10 @@ use Auth;
 class AdminController extends Controller
 {
     public function index() {
+        /*
+        $sapi = [];
+        $sapi['sembarang'] = json_encode();
+        */
         $data               =   [];
 
         return view('dashboard', $data);
@@ -103,10 +107,12 @@ class AdminController extends Controller
     public function viewBuku() {
         $genre = Genre::all();
         $buku  =   Buku::all();
-
+        $kintil = "anjing";
+        
         $data   =   [];
         $data['buku']  = $buku;
         $data['genre'] = $genre;
+        $data['kintil'] = $kintil;
 
         return view('buku', $data);
     }
