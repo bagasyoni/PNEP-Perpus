@@ -4,14 +4,11 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-7 align-self-center">
-            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Data Peminjaman Buku</h4>
+            <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Data Pengembalian Buku</h4>
         </div>
     </div>
 </div>
 <div class="container-fluid">
-    <div class="card-group">
-        <button type="button" class="btn waves-effect waves-light btn-lg btn-primary" data-toggle="modal" data-target="#add">Tambah Data</button>
-    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -22,26 +19,38 @@
                             <thead>
                                 <tr>
                                     <th>No Bukti</th>
-                                    <th>Kode Member</th>
                                     <th>Nama Member</th>
-                                    <th>Tanggal Pinjam</th>
+                                    <th>Tanggal Kembali</th>
                                     <th>Keterangan</th>
                                     <th>Nama Buku</th>
+                                    <th>Status</th>
                                     <th width="30">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($pinjam as $row)
+                                @foreach($kembali as $row)
                                 <tr>
                                     <td>{{$row->no_bukti}}</td>
-                                    <td>{{$row->kd_member}}</td>
                                     <td>{{$row->na_member}}</td>
-                                    <td>{{$row->tgl}}</td>
+                                    @if($row->status == 0)
+                                        <td> - </td>
+                                    @else
+                                        <td>{{$row->tgl}}</td>
+                                    @endif
                                     <td>{{$row->keterangan}}</td>
                                     <td>{{$row->na_buku}}</td>
+                                    @if($row->status == 0)
+                                        <td><span class="badge badge-warning ml-auto">belum dikembalikan</span></td>
+                                    @else
+                                        <td><span class="badge badge-success ml-auto">sudah dikembalikan</span></td>
+                                    @endif
                                     <td> 
-                                        <button type="button" class="btn waves-effect waves-light btn-sm btn-info edit" pinjamid="{{$row->no_id}}">Edit</button>
-                                        <button type="button" class="btn waves-effect waves-light btn-sm btn-danger delete" pinjamid="{{$row->no_id}}">Hapus</button>
+                                    @if($row->status == 0)
+                                        <button type="button" class="btn waves-effect waves-light btn-sm btn-info edit" pinjamid="{{$row->no_id}}">Konfirmasi</button>
+                                    @else
+                                        <button type="button" class="btn waves-effect waves-light btn-sm btn-info edit" pinjamid="{{$row->no_id}}" hidden>Konfirmasi</button>
+                                    @endif
+                                        <!-- <button type="button" class="btn waves-effect waves-light btn-sm btn-danger delete" pinjamid="{{$row->no_id}}">Hapus</button> -->
                                     </td>
                                 </tr>
                                 @endforeach
@@ -139,16 +148,16 @@
                     </div> -->
                     <div class="form-group">
                         <label for="username">Nama Member</label>
-                        <select class="form-control" name="na_member" id="edit_na_member">
-                            <option value=""> pilih member </option>
+                        <input class="form-control" name="na_member" id="edit_na_member" readonly>
+                            <!-- <option value=""> pilih member </option>
                             @foreach($member as $row)
                             <option value="{{$row->na_member}}">{{$row->na_member}}</option>
-                            @endforeach
-                        </select>
+                            @endforeach -->
+                        </input>
                     </div>
                     <div class="form-group">
                         <label for="username">Keterangan</label>
-                        <input class="form-control" type="text" id="edit_keterangan" placeholder="Masukkan Keterangan">
+                        <input class="form-control" type="text" id="edit_keterangan" placeholder="Masukkan Keterangan" readonly>
                     </div>
                     <div class="form-group">
                         <label for="username">Judul Buku</label>
@@ -172,7 +181,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light"
                         data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="update">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="update">Konfirmasi</button>
                 </div>
             </div>
         </div>
@@ -207,7 +216,7 @@ $(document).on('click', '#create', function() {
 $(document).on('click', '.edit', function() {
     var no_id  =   $(this).attr('pinjamid');
     $.ajax({
-        url: '{{route("getpinjam")}}',
+        url: '{{route("getkembali")}}',
         type: 'post',
         data: {no_id: no_id, _token: '{{csrf_token()}}'},
         success: function(response){
@@ -230,7 +239,7 @@ $(document).on('click', '#update', function() {
 
     if(no_bukti != '' && na_member != ''  && keterangan != ''&& id_buku != '') {
         $.ajax({
-            url: '{{route("updatepinjam")}}',
+            url: '{{route("updatekembali")}}',
             type: 'post',
             data: {no_id: no_id, no_bukti: no_bukti, na_member: na_member, keterangan: keterangan, id_buku: id_buku,  _token: '{{csrf_token()}}'},
             success: function(response){

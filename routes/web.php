@@ -17,6 +17,7 @@ Route::get('logout', 'AuthController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth:administrator'], function() {
     Route::get('dashboard', 'AdminController@index');
+    Route::get('cek', 'AdminController@cek')->name('cek');
     Route::post('dashboard/updatevoting', 'AdminController@updateVoting')->name('updatevoting');
     Route::post('dashboard/chart', 'AdminController@getChart')->name('Chart');
 
@@ -50,10 +51,14 @@ Route::group(['middleware' => 'auth:administrator'], function() {
     Route::post('tpinjam/update', 'AdminController@updatePinjam')->name('updatepinjam');
     Route::post('tpinjam/delete', 'AdminController@deletePinjam')->name('deletepinjam');
 
+    Route::get('tkembali', 'AdminController@viewKembali');
+    Route::post('tkembali/get', 'AdminController@getKembali')->name('getkembali');
+    Route::post('tkembali/update', 'AdminController@updateKembali')->name('updatekembali');
+    Route::post('tkembali/delete', 'AdminController@deleteKembali')->name('deletekembali');
+
     
 });
 
-Route::get('cek', 'AdminController@cek')->name('cek');
 
 Route::middleware(['auth:pengawas'])->group(function() {
     Route::get('pengawas', 'PengawasController@index');

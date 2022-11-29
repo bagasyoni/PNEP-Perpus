@@ -11,6 +11,7 @@ use App\Voting;
 use App\Genre;
 use App\Member;
 use App\Pinjam;
+use App\Kembali;
 use Carbon\Carbon;
 use DB;
 use URL;
@@ -281,7 +282,7 @@ class AdminController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Member berhasil dihapus']);
     }
-    //=== end member ===//
+    //=== end Member ===//
 
     //=== Start Pinjam ===//
     public function viewPinjam() {
@@ -338,25 +339,23 @@ class AdminController extends Controller
     }
 
     public function updatePinjam(Request $request) {
-        $no_id     =   $request->input('no_id');
-        $no_bukti  =   $request->input('no_bukti');
-        $na_peg    =   $request->input('na_peg');
-        $devisi    =   $request->input('devisi');
-        $tgl       =   $request->input('tgl');
-        $keterangan=   $request->input('keterangan');
-        $buku_id   =   $request->input('buku_id');
-        $usrnm     =   $request->input('usrnm');
-        $tg_smp    =   $request->input('tg_smp');
+        $no_id        =   $request->input('no_id');
+        $no_bukti     =   $request->input('no_bukti');
+        $kd_member    =   $request->input('kd_member');
+        $na_member    =   $request->input('na_member');
+        $tgl          =   $request->input('tgl');
+        $id_buku      =   $request->input('id_buku');
+        $keterangan   =   $request->input('keterangan');
+        $usrnm        =   Auth::User()->name;
 
         Pinjam::where('no_id', $no_id)->update([
-            'no_bukti' =>  $no_bukti,
-            'na_peg'   =>  $na_peg,
-            'devisi'    =>  $devisi,
-            'tgl'       =>  $tgl,
-            'keterangan'      =>  $keterangan,
-            'buku_id'  =>  $buku_id,
-            'usrnm'    =>  $usrnm,
-            'tg_smp'   =>  $tg_smp
+            'no_bukti'    =>  $no_bukti,
+            'kd_member'   =>  $kd_member,
+            'na_member'   =>  $na_member,
+            'tgl'         =>  $tgl,
+            'keterangan'  =>  $keterangan,
+            'id_buku'     =>  $id_buku,
+            'usrnm'       =>  $usrnm
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Data berhasil diupdate']);
@@ -370,10 +369,67 @@ class AdminController extends Controller
     }
     //=== end pinjam ===//
 
+    //=== Start Kembali ===//
+    public function viewKembali() {
+        $member    =  Member::all();
+        $buku      =  Buku::all();
+        $kembali   =  DB::table('pinjam')
+                        ->join('buku','pinjam.id_buku','buku.no_id')
+                        ->select('pinjam.no_id','pinjam.no_bukti','pinjam.kd_member','pinjam.na_member','pinjam.tgl','pinjam.keterangan','buku.na_buku','pinjam.status')
+                        ->get();
+        $data   =   [];
+        $data['kembali']  =   $kembali;
+        $data['buku']     =   $buku;
+        $data['member']   =   $member;
+
+                    
+        return view('kembali', $data);
+    }
+
+    public function getKembali(Request $request) {
+        $no_id     =   $request->input('no_id');
+        $pinjam    =   Pinjam::where('no_id', $no_id)->first();
+
+        return response()->json($pinjam);
+    }
+
+    public function updateKembali(Request $request) {
+        $no_id     =   $request->input('no_id');
+        $no_bukti     =   $request->input('no_bukti');
+        $kd_member      =   $request->input('kd_member');
+        $na_member      =   $request->input('na_member');
+        $tgl            =   Carbon::now()->format('Y-m-d');
+        $id_buku        =   $request->input('id_buku');
+        $keterangan     =   $request->input('keterangan');
+        $usrnm          =   Auth::User()->name;
+        $status         =   "1";
+
+        Pinjam::where('no_id', $no_id)->update([
+            'no_bukti'    =>  $no_bukti,
+            'kd_member'   =>  $kd_member,
+            'na_member'   =>  $na_member,
+            'tgl'         =>  $tgl,
+            'id_buku'     =>  $id_buku,
+            'keterangan'  =>  $keterangan,
+            'usrnm'       =>  $usrnm,
+            'status'      =>  $status
+        ]);
+
+        return response()->json(['status' => 'success', 'message' => 'Data berhasil diupdate']);
+    }
+
+    public function deleteKembali(Request $request) {
+        $no_id     =   $request->input('no_id');
+        Pinjam::where('no_id', $no_id)->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Data berhasil dihapus']);
+    }
+    //=== end kembali ===//
+
     public function getChart(){
         $totalBuku      = Buku::count();
         $totalPegawai   = Pegawai::count();
-        $dataChart     = DB::table('keluar')
+        $dataChart      = DB::table('keluar')
                             ->join('buku','keluar.buku_id','buku.no_id')
                             ->select('keluar.no_id','keluar.no_bukti','keluar.na_peg','keluar.devisi','keluar.tgl','keluar.ket','buku.na_buku')
                             ->whereMonth('keluar.tgl','=', '11')

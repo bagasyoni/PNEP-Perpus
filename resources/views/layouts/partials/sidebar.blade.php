@@ -40,7 +40,7 @@
                         aria-expanded="false"><i data-feather="message-square" class="feather-icon"></i><span
                             class="hide-menu">Peminjaman Buku</span></a>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="{{url('')}}"
+                <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="{{url('tkembali')}}"
                         aria-expanded="false"><i data-feather="message-square" class="feather-icon"></i><span
                             class="hide-menu">Pengembalian Buku</span></a>
                 </li>

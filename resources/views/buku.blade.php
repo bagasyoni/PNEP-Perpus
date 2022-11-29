@@ -11,7 +11,7 @@
 <div class="container-fluid">
     <div class="card-group">
         <button type="button" class="btn waves-effect waves-light btn-lg btn-primary" data-toggle="modal" data-target="#add">Tambah Data</button>
-        <label>{{$buku}}</label>
+        <!-- <label>{{$buku[3]}}</label> -->
     </div>
     <div class="row">
         <div class="col-12">
